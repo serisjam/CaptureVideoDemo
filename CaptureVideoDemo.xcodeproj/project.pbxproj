@@ -13,6 +13,12 @@
 		EBF1C2251CF69FD5000D3194 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBF1C2231CF69FD5000D3194 /* Main.storyboard */; };
 		EBF1C2271CF69FD5000D3194 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBF1C2261CF69FD5000D3194 /* Assets.xcassets */; };
 		EBF1C22A1CF69FD5000D3194 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBF1C2281CF69FD5000D3194 /* LaunchScreen.storyboard */; };
+		EBF1C2351CF6A1ED000D3194 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF1C2341CF6A1ED000D3194 /* AVFoundation.framework */; };
+		EBF1C23F1CF6A2DE000D3194 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF1C23E1CF6A2DE000D3194 /* ImageIO.framework */; };
+		EBF1C2421CF6D3AC000D3194 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF1C2411CF6D3AC000D3194 /* GLKit.framework */; };
+		EBF1C2451CF6D3DF000D3194 /* CoreImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C2441CF6D3DF000D3194 /* CoreImageView.m */; };
+		EBF1C2481CF6FEE7000D3194 /* CaptureImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */; };
+		EBF1C24C1CF70B21000D3194 /* JCCameraImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C24B1CF70B21000D3194 /* JCCameraImageHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +32,15 @@
 		EBF1C2261CF69FD5000D3194 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EBF1C2291CF69FD5000D3194 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EBF1C22B1CF69FD5000D3194 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBF1C2341CF6A1ED000D3194 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		EBF1C23E1CF6A2DE000D3194 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		EBF1C2411CF6D3AC000D3194 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		EBF1C2431CF6D3DF000D3194 /* CoreImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreImageView.h; sourceTree = "<group>"; };
+		EBF1C2441CF6D3DF000D3194 /* CoreImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreImageView.m; sourceTree = "<group>"; };
+		EBF1C2461CF6FEE7000D3194 /* CaptureImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureImageViewController.h; sourceTree = "<group>"; };
+		EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureImageViewController.m; sourceTree = "<group>"; };
+		EBF1C24A1CF70B21000D3194 /* JCCameraImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCCameraImageHelper.h; sourceTree = "<group>"; };
+		EBF1C24B1CF70B21000D3194 /* JCCameraImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCCameraImageHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +48,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBF1C2421CF6D3AC000D3194 /* GLKit.framework in Frameworks */,
+				EBF1C23F1CF6A2DE000D3194 /* ImageIO.framework in Frameworks */,
+				EBF1C2351CF6A1ED000D3194 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				EBF1C2191CF69FD5000D3194 /* CaptureVideoDemo */,
+				EBF1C2401CF6A9CF000D3194 /* Frameworks */,
 				EBF1C2181CF69FD5000D3194 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,10 +77,15 @@
 		EBF1C2191CF69FD5000D3194 /* CaptureVideoDemo */ = {
 			isa = PBXGroup;
 			children = (
+				EBF1C2491CF70B0E000D3194 /* JCCameraImageHelper */,
 				EBF1C21D1CF69FD5000D3194 /* AppDelegate.h */,
 				EBF1C21E1CF69FD5000D3194 /* AppDelegate.m */,
+				EBF1C2431CF6D3DF000D3194 /* CoreImageView.h */,
+				EBF1C2441CF6D3DF000D3194 /* CoreImageView.m */,
 				EBF1C2201CF69FD5000D3194 /* ViewController.h */,
 				EBF1C2211CF69FD5000D3194 /* ViewController.m */,
+				EBF1C2461CF6FEE7000D3194 /* CaptureImageViewController.h */,
+				EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */,
 				EBF1C2231CF69FD5000D3194 /* Main.storyboard */,
 				EBF1C2261CF69FD5000D3194 /* Assets.xcassets */,
 				EBF1C2281CF69FD5000D3194 /* LaunchScreen.storyboard */,
@@ -77,6 +101,25 @@
 				EBF1C21B1CF69FD5000D3194 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EBF1C2401CF6A9CF000D3194 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EBF1C2411CF6D3AC000D3194 /* GLKit.framework */,
+				EBF1C23E1CF6A2DE000D3194 /* ImageIO.framework */,
+				EBF1C2341CF6A1ED000D3194 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EBF1C2491CF70B0E000D3194 /* JCCameraImageHelper */ = {
+			isa = PBXGroup;
+			children = (
+				EBF1C24A1CF70B21000D3194 /* JCCameraImageHelper.h */,
+				EBF1C24B1CF70B21000D3194 /* JCCameraImageHelper.m */,
+			);
+			path = JCCameraImageHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,8 +193,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBF1C2221CF69FD5000D3194 /* ViewController.m in Sources */,
+				EBF1C2481CF6FEE7000D3194 /* CaptureImageViewController.m in Sources */,
+				EBF1C2451CF6D3DF000D3194 /* CoreImageView.m in Sources */,
 				EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */,
 				EBF1C21C1CF69FD5000D3194 /* main.m in Sources */,
+				EBF1C24C1CF70B21000D3194 /* JCCameraImageHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +310,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CaptureVideoDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lapelgroup.CaptureVideoDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -275,6 +322,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CaptureVideoDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lapelgroup.CaptureVideoDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -300,6 +348,7 @@
 				EBF1C2301CF69FD5000D3194 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
