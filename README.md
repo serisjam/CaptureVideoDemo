@@ -6,6 +6,7 @@ JCCameraImageHelper 是一个帮助类
 - (void)embedPreviewInView:(UIView *)aView;
 
 捕获摄像头其中的一帧并转化为CIImage
+
 typedef void(^cameraCallBacklBlock)(CIImage *image, NSString *qrContent, BOOL *isNextFilterImage);
 - (void)carmeraScanBlock:(cameraCallBacklBlock)cameraCallBacklBlock;
 
