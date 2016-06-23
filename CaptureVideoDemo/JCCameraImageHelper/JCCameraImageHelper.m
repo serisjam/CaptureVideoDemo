@@ -8,6 +8,9 @@
 
 #import "JCCameraImageHelper.h"
 
+//版本比较
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] !=NSOrderedAscending)
+
 @interface JCCameraImageHelper () <AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureMetadataOutputObjectsDelegate>
 
 @property (nonatomic, strong) AVCaptureSession *session;
@@ -15,6 +18,7 @@
 @property (nonatomic, strong) AVCaptureMetadataOutput *captureMetadataOutput;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @property (nonatomic, strong) cameraCallBacklBlock callBackBlock;
+@property (nonatomic, strong) cameraCaptureOriginDataBlock captureOriginDataBlock;
 @property (nonatomic, assign) BOOL isGetNextFilterImage;
 
 @property (nonatomic, assign) JCCameraScanType cameraScanType;
@@ -87,7 +91,7 @@
     dispatch_queue_t dispatchQueue;
     dispatchQueue = dispatch_queue_create("com.jam.camera", NULL);
     
-    if (self.cameraScanType == JCCameraScanImageType) {
+    if (self.cameraScanType == JCCameraScanImageType || self.cameraScanType == JCCameraScanOriginType) {
         _captureOutput = [[AVCaptureVideoDataOutput alloc] init];
         _captureOutput.videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey, nil];
         _captureOutput.alwaysDiscardsLateVideoFrames = YES;
@@ -109,10 +113,20 @@
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    
+    if (_captureOriginDataBlock) {
+        _captureOriginDataBlock(sampleBuffer);
+        return ;
+    }
+    
     if (_callBackBlock && _isGetNextFilterImage) {
-        CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-        CIImage *outputImage = [[CIImage imageWithCVImageBuffer:imageBuffer] imageByApplyingTransform:[self getTransformWith:_captureDevicePosition]];
-//        UIImage *image = [UIImage imageWithCIImage:outputImage];
+        CIImage *outputImage;
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
+            CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+            outputImage = [[CIImage imageWithCVImageBuffer:imageBuffer] imageByApplyingTransform:[self getTransformWith:_captureDevicePosition]];
+        } else {
+            outputImage = [[self imageFromSampleBuffer:sampleBuffer] imageByApplyingTransform:[self getTransformWith:_captureDevicePosition]];
+        }
         _isGetNextFilterImage = NO;
         BOOL isNext = NO;
         _callBackBlock(outputImage, nil, &isNext);
@@ -140,7 +154,7 @@
 
 #pragma mark private method
 
-- (UIImage *)imageFromSampleBuffer:(CMSampleBufferRef)sampleBuffer
+- (CIImage *)imageFromSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     CFRetain(sampleBuffer);
     // Get a CMSampleBuffer's Core Video image buffer for the media data
@@ -174,8 +188,9 @@
 
     // Create an image object from the Quartz image
     //UIImage *image = [UIImage imageWithCGImage:quartzImage];
-    UIImage *image = [UIImage imageWithCGImage:quartzImage scale:1.0 orientation:UIImageOrientationRight];
-    image = [self fixOrientation:image];
+    CIImage *image = [CIImage imageWithCGImage:quartzImage];
+//    UIImage *image = [UIImage imageWithCGImage:quartzImage scale:1.0 orientation:UIImageOrientationRight];
+//    image = [self fixOrientation:image];
     
     // Release the Quartz image
     CGImageRelease(quartzImage);
@@ -291,6 +306,10 @@
 
 - (void)carmeraScanBlock:(cameraCallBacklBlock)cameraCallBacklBlock {
     _callBackBlock = cameraCallBacklBlock;
+}
+
+- (void)carmeraScanOriginBlock:(cameraCaptureOriginDataBlock)cameraCaptureOriginBlock {
+    _captureOriginDataBlock = cameraCaptureOriginBlock;
 }
 
 - (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position
