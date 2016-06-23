@@ -6,21 +6,23 @@
 //  Copyright © 2016年 Jam. All rights reserved.
 //
 
-#import "CaptureImageViewController.h"
-#import "JCH264Encoder.h"
-#import "JCCameraImageHelper.h"
-
 #import <libkern/OSAtomic.h>
+
+#import "CaptureImageViewController.h"
+#import "JCCameraImageHelper.h"
+#import "JCH264Encoder.h"
 
 /**  时间戳 */
 #define NOW (CACurrentMediaTime()*1000)
 
-@interface CaptureImageViewController ()
+@interface CaptureImageViewController () <JCH264EncoderDelegate>
 
 @property (nonatomic, strong) JCCameraImageHelper *cameraHelper;
-@property (nonatomic, strong) JCH264Encoder *jcH264encoder;
+@property (nonatomic, strong) JCH264Encoder *jcH264Encoder;
 
 @property (nonatomic, assign) uint64_t timestamp;
+
+@property (nonatomic, strong) NSFileHandle *h264FileHandle;
 
 @end
 
@@ -42,19 +44,28 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    //打开文件句柄, 记录h264文件
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *h264File = [documentsDirectory stringByAppendingPathComponent:@"test.h264"];
+    [fileManager removeItemAtPath:h264File error:nil];
+    [fileManager createFileAtPath:h264File contents:nil attributes:nil];
+    
+    self.h264FileHandle = [NSFileHandle fileHandleForWritingAtPath:h264File];
+    
     //实时取景
     [_cameraHelper startRunning];
     
-    _jcH264encoder = [[JCH264Encoder alloc] initEncodeWidth:480 withHeight:640];
+    self.jcH264Encoder = [[JCH264Encoder alloc] initEncodeWidth:540.0 withHeight:960.0];
+    [self.jcH264Encoder setDelegate:self];
     
     __weak typeof(self) weakSelf = self;
-    [_cameraHelper carmeraScanOriginBlock:^(CMSampleBufferRef sampleBufferRef) {
-        [weakSelf.jcH264encoder encodeVideoData:sampleBufferRef timeStamp:[weakSelf getCurrentTimestamp]];
-        
+    
+    [_cameraHelper carmeraScanOriginBlock:^(CMSampleBufferRef sampleBufferRef){
+        [weakSelf.jcH264Encoder encodeVideoData:sampleBufferRef timeStamp:[weakSelf currentTimestamp]];
     }];
-//    [_cameraHelper carmeraScanBlock:^(CIImage *image, NSString *qrContent, BOOL *isNextFilterImage){
-//        *isNextFilterImage = YES;
-//    }];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -78,26 +89,55 @@
 }
 */
 - (IBAction)onSwitch:(id)sender {
-    [_cameraHelper swapFrontAndBackCameras];
+//    [_cameraHelper swapFrontAndBackCameras];
+    
+    [_cameraHelper stopRunning];
+    [self.jcH264Encoder endVideoCompression];
+    [self.h264FileHandle closeFile];
 }
 
-- (u_int64_t)getCurrentTimestamp {
-    static OSSpinLock ossLock;
-    static dispatch_once_t onceToken;
-    static uint64_t currentts;
+#pragma mark JCH264EncoderDelegate
+
+- (void)getEncodedData:(NSData *)data isKeyFrame:(BOOL)isKeyFrame {
+    NSLog(@"gotEncodedData %d", (int)[data length]);
     
+    if (self.h264FileHandle != NULL)
+    {
+        const char bytes[] = "\x00\x00\x00\x01";
+        size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
+        NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+        [self.h264FileHandle writeData:ByteHeader];
+        [self.h264FileHandle writeData:data];
+    }
+}
+
+- (void)getSpsData:(NSData *)spsData withPpsData:(NSData *)ppsData {
+    const char bytes[] = "\x00\x00\x00\x01";
+    size_t length = (sizeof bytes) - 1; //string literals have implicit trailing '\0'
+    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];
+    [self.h264FileHandle writeData:ByteHeader];
+    [self.h264FileHandle writeData:spsData];
+    [self.h264FileHandle writeData:ByteHeader];
+    [self.h264FileHandle writeData:ppsData];
+}
+
+#pragma mark private
+
+- (uint64_t)currentTimestamp{
+    
+    static OSSpinLock lock;
+    
+    static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ossLock = OS_SPINLOCK_INIT;
-        currentts = 0;
+        lock = OS_SPINLOCK_INIT;
         _timestamp = NOW;
     });
     
-    OSSpinLockLock(&ossLock);
-    currentts = NOW - _timestamp;
-    OSSpinLockUnlock(&ossLock);
+    OSSpinLockLock(&lock);
+    uint64_t currentts = NOW - _timestamp;
+    OSSpinLockUnlock(&lock);
     
     return currentts;
 }
-
 
 @end

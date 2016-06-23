@@ -53,13 +53,13 @@
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(800*1024));
         NSArray *dataLimits = @[@(150*1024), @(1)];
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)dataLimits);
-        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_Quality, (__bridge CFTypeRef)@(0.2));
+        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_Quality, (__bridge CFTypeRef)@(1.0));
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MoreFramesBeforeStart, kCFBooleanTrue);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MoreFramesAfterEnd, kCFBooleanTrue);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_H264EntropyMode, kVTH264EntropyMode_CABAC);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxFrameDelayCount, (__bridge CFTypeRef)@(15));
-        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
+        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanFalse);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)@(30));
         
         VTCompressionSessionPrepareToEncodeFrames(_compressionSession);
@@ -108,6 +108,10 @@ static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sour
             if (statusCode == noErr) {
                 encoder.sps = [NSData dataWithBytes:sparameterSet length:sparameterSetSize];
                 encoder.pps = [NSData dataWithBytes:pparameterSet length:pparameterSetSize];
+                
+                if ([encoder.delegate respondsToSelector:@selector(getSpsData:withPpsData:)]) {
+                    [encoder.delegate getSpsData:encoder.sps withPpsData:encoder.pps];
+                }
             }
         }
     }
@@ -134,6 +138,10 @@ static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sour
             
             NSData *data = [[NSData alloc] initWithBytes:dataPointer+bufferOffset+AVCCHeaderLength length:NALUnitLength];
             
+            if ([encoder.delegate respondsToSelector:@selector(getEncodedData:isKeyFrame:)]) {
+                [encoder.delegate getEncodedData:data isKeyFrame:isKeyFrame];
+            }
+            
             bufferOffset += AVCCHeaderLength + NALUnitLength;
         }
         
@@ -157,7 +165,10 @@ static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sour
     NSNumber *timeNumber = @(timeStamp);
     VTEncodeInfoFlags flags;
     VTCompressionSessionEncodeFrame(_compressionSession, imageBuffer, presentationTimeStamp, duration, (__bridge CFDictionaryRef)prorperties, (__bridge_retained void *)timeNumber, &flags);
-    
+}
+
+- (void)endVideoCompression {
+    VTCompressionSessionCompleteFrames(_compressionSession, kCMTimeInvalid);
 }
 
 @end

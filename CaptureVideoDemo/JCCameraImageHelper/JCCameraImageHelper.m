@@ -99,6 +99,8 @@
         
         [self.session addOutput:_captureOutput];
         
+        [self setRelativeVideoOrientation];
+        
         return ;
     }
     
@@ -275,6 +277,33 @@
     CGImageRelease(cgimg);
     
     return img;
+}
+
+- (void)setRelativeVideoOrientation {
+    AVCaptureConnection *connection = [_captureOutput connectionWithMediaType:AVMediaTypeVideo];
+    
+    switch ([[UIDevice currentDevice] orientation]) {
+        case UIInterfaceOrientationPortrait:
+#if defined(__IPHONE_8_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
+        case UIInterfaceOrientationUnknown:
+#endif
+            connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+            
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            connection.videoOrientation =
+            AVCaptureVideoOrientationPortraitUpsideDown;
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            connection.videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            connection.videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+            break;
+        default:
+            break;
+    }
+    
 }
 
 #pragma mark public method
