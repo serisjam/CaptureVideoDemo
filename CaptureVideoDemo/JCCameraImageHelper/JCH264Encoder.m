@@ -8,6 +8,126 @@
 
 #import "JCH264Encoder.h"
 
+@interface JCLiveVideoproperties : NSObject
+
+/// 视频分辨率宽
+@property (nonatomic, assign) NSInteger width;
+
+/// 视频分辨率高
+@property (nonatomic, assign) NSInteger height;
+
+/// 视频的帧率，即 fps
+@property (nonatomic, assign) NSUInteger videoFrameRate;
+
+/// 视频的最大帧率，即 fps
+@property (nonatomic, assign) NSUInteger videoMaxFrameRate;
+
+/// 视频的最小帧率，即 fps
+@property (nonatomic, assign) NSUInteger videoMinFrameRate;
+
+/// 最大关键帧间隔，可设定为 fps 的2倍，影响一个 gop 的大小
+@property (nonatomic, assign) NSUInteger videoMaxKeyframeInterval;
+
+/// 视频的码率，单位是 bps
+@property (nonatomic, assign) NSUInteger videoBitRate;
+
+/// 视频的最大码率，单位是 bps
+@property (nonatomic, assign) NSUInteger videoMaxBitRate;
+
+/// 视频的最小码率，单位是 bps
+@property (nonatomic, assign) NSUInteger videoMinBitRate;
+
+- (instancetype)initWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality;
+
+@end
+
+@implementation JCLiveVideoproperties
+
+- (instancetype)initWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality {
+    self = [super init];
+    
+    if (self) {
+        [self configPropertiesWithJCLiveVideoQuality:liveVideoQuality];
+    }
+    
+    return self;
+}
+
+- (void)configPropertiesWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality {
+    switch (liveVideoQuality) {
+        case JCLiveVideoQuality_Low1: {
+            self.width = 360;
+            self.height = 640;
+            self.videoFrameRate = 15;
+            self.videoMaxFrameRate = 15;
+            self.videoMinFrameRate = 10;
+            self.videoBitRate = 500 * 1024;
+            self.videoMaxBitRate = 600 * 1024;
+            self.videoMinBitRate = 250 * 1024;
+        }
+            break;
+        case JCLiveVideoQuality_Low2: {
+            self.width = 360;
+            self.height = 640;
+            self.videoFrameRate = 24;
+            self.videoMaxFrameRate = 24;
+            self.videoMinFrameRate = 12;
+            self.videoBitRate = 800 * 1024;
+            self.videoMaxBitRate = 900 * 1024;
+            self.videoMinBitRate = 500 * 1024;
+            
+        }
+            break;
+        case JCLiveVideoQuality_Low3: {
+            self.width = 360;
+            self.height = 640;
+            self.videoFrameRate = 30;
+            self.videoMaxFrameRate = 30;
+            self.videoMinFrameRate = 15;
+            self.videoBitRate = 800 * 1024;
+            self.videoMaxBitRate = 900 * 1024;
+            self.videoMinBitRate = 500 * 1024;
+        }
+            break;
+        case JCLiveVideoQuality_Medium1: {
+            self.width = 540;
+            self.height = 960;
+            self.videoFrameRate = 30;
+            self.videoMaxFrameRate = 30;
+            self.videoMinFrameRate = 15;
+            self.videoBitRate = 800 * 1024;
+            self.videoMaxBitRate = 900 * 1024;
+            self.videoMinBitRate = 500 * 1024;
+            
+        }
+            break;
+        case JCLiveVideoQuality_Medium2: {
+            
+        }
+            break;
+        case JCLiveVideoQuality_Medium3: {
+            
+        }
+            break;
+        case JCLiveVideoQuality_High1: {
+            
+        }
+            break;
+        case JCLiveVideoQuality_High2: {
+            
+        }
+            break;
+        case JCLiveVideoQuality_High3: {
+            
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+@end
+
 @interface JCH264Encoder ()
 
 @property (nonatomic, assign) VTCompressionSessionRef compressionSession;
@@ -21,6 +141,16 @@
 @end
 
 @implementation JCH264Encoder
+
+- (instancetype)initWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality {
+    self = [super init];
+    
+    if (self) {
+        
+    }
+    
+    return self;
+}
 
 - (instancetype)initEncodeWidth:(int)width withHeight:(int)height {
     self = [super init];
