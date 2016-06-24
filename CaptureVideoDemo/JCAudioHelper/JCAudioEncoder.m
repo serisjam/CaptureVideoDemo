@@ -1,0 +1,13 @@
+//
+//  JCAudioEncoder.m
+//  CaptureVideoDemo
+//
+//  Created by seris-Jam on 16/6/24.
+//  Copyright © 2016年 Jam. All rights reserved.
+//
+
+#import "JCAudioEncoder.h"
+
+@implementation JCAudioEncoder
+
+@end

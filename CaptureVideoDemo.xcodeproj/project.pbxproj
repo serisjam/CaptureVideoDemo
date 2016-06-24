@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3949ACD41D1CFEB100DB51DC /* AVPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */; };
+		39B0BB431D1D190700A83216 /* JCAudioHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39B0BB421D1D190700A83216 /* JCAudioHelper.m */; };
+		39B0BB461D1D1F0A00A83216 /* JCAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 39B0BB451D1D1F0A00A83216 /* JCAudioEncoder.m */; };
 		39E772461D1BDC8A005891BA /* JCH264Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E772451D1BDC8A005891BA /* JCH264Encoder.m */; };
 		EBF1C21C1CF69FD5000D3194 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C21B1CF69FD5000D3194 /* main.m */; };
 		EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C21E1CF69FD5000D3194 /* AppDelegate.m */; };
@@ -26,6 +28,10 @@
 /* Begin PBXFileReference section */
 		3949ACD21D1CFEB100DB51DC /* AVPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPlayerViewController.h; sourceTree = "<group>"; };
 		3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPlayerViewController.m; sourceTree = "<group>"; };
+		39B0BB411D1D190700A83216 /* JCAudioHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCAudioHelper.h; sourceTree = "<group>"; };
+		39B0BB421D1D190700A83216 /* JCAudioHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCAudioHelper.m; sourceTree = "<group>"; };
+		39B0BB441D1D1F0A00A83216 /* JCAudioEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCAudioEncoder.h; sourceTree = "<group>"; };
+		39B0BB451D1D1F0A00A83216 /* JCAudioEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCAudioEncoder.m; sourceTree = "<group>"; };
 		39E772441D1BDC8A005891BA /* JCH264Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCH264Encoder.h; sourceTree = "<group>"; };
 		39E772451D1BDC8A005891BA /* JCH264Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCH264Encoder.m; sourceTree = "<group>"; };
 		EBF1C2171CF69FD5000D3194 /* CaptureVideoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaptureVideoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +69,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3949ACD71D1D143300DB51DC /* JCAudioHelper */ = {
+			isa = PBXGroup;
+			children = (
+				39B0BB411D1D190700A83216 /* JCAudioHelper.h */,
+				39B0BB421D1D190700A83216 /* JCAudioHelper.m */,
+				39B0BB441D1D1F0A00A83216 /* JCAudioEncoder.h */,
+				39B0BB451D1D1F0A00A83216 /* JCAudioEncoder.m */,
+			);
+			path = JCAudioHelper;
+			sourceTree = "<group>";
+		};
 		EBF1C20E1CF69FD5000D3194 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +100,7 @@
 		EBF1C2191CF69FD5000D3194 /* CaptureVideoDemo */ = {
 			isa = PBXGroup;
 			children = (
+				3949ACD71D1D143300DB51DC /* JCAudioHelper */,
 				EBF1C2491CF70B0E000D3194 /* JCCameraImageHelper */,
 				EBF1C21D1CF69FD5000D3194 /* AppDelegate.h */,
 				EBF1C21E1CF69FD5000D3194 /* AppDelegate.m */,
@@ -209,6 +227,8 @@
 				EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */,
 				EBF1C21C1CF69FD5000D3194 /* main.m in Sources */,
 				3949ACD41D1CFEB100DB51DC /* AVPlayerViewController.m in Sources */,
+				39B0BB431D1D190700A83216 /* JCAudioHelper.m in Sources */,
+				39B0BB461D1D1F0A00A83216 /* JCAudioEncoder.m in Sources */,
 				EBF1C24C1CF70B21000D3194 /* JCCameraImageHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
