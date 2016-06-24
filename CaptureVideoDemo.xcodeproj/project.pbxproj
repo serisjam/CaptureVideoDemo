@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3949ACD41D1CFEB100DB51DC /* AVPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */; };
 		39E772461D1BDC8A005891BA /* JCH264Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E772451D1BDC8A005891BA /* JCH264Encoder.m */; };
 		EBF1C21C1CF69FD5000D3194 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C21B1CF69FD5000D3194 /* main.m */; };
 		EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C21E1CF69FD5000D3194 /* AppDelegate.m */; };
@@ -23,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3949ACD21D1CFEB100DB51DC /* AVPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPlayerViewController.h; sourceTree = "<group>"; };
+		3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPlayerViewController.m; sourceTree = "<group>"; };
 		39E772441D1BDC8A005891BA /* JCH264Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCH264Encoder.h; sourceTree = "<group>"; };
 		39E772451D1BDC8A005891BA /* JCH264Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCH264Encoder.m; sourceTree = "<group>"; };
 		EBF1C2171CF69FD5000D3194 /* CaptureVideoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaptureVideoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +92,8 @@
 				EBF1C2211CF69FD5000D3194 /* ViewController.m */,
 				EBF1C2461CF6FEE7000D3194 /* CaptureImageViewController.h */,
 				EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */,
+				3949ACD21D1CFEB100DB51DC /* AVPlayerViewController.h */,
+				3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */,
 				EBF1C2231CF69FD5000D3194 /* Main.storyboard */,
 				EBF1C2261CF69FD5000D3194 /* Assets.xcassets */,
 				EBF1C2281CF69FD5000D3194 /* LaunchScreen.storyboard */,
@@ -203,6 +208,7 @@
 				EBF1C2451CF6D3DF000D3194 /* CoreImageView.m in Sources */,
 				EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */,
 				EBF1C21C1CF69FD5000D3194 /* main.m in Sources */,
+				3949ACD41D1CFEB100DB51DC /* AVPlayerViewController.m in Sources */,
 				EBF1C24C1CF70B21000D3194 /* JCCameraImageHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

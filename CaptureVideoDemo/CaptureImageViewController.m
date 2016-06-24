@@ -140,7 +140,8 @@
 }
 
 - (IBAction)changeLow:(id)sender {
-    [self.jcH264Encoder changeJCLiveVideoQuality:JCLiveVideoQuality_Low2];
+    [_cameraHelper swapFrontAndBackCameras];
+//    [self.jcH264Encoder changeJCLiveVideoQuality:JCLiveVideoQuality_Low2];
 }
 
 - (IBAction)changeHigh:(id)sender {

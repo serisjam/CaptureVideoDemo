@@ -6,7 +6,7 @@
 //  Copyright © 2016年 Jam. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <VideoToolbox/VideoToolbox.h>
 
 /// 视频质量

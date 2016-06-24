@@ -34,6 +34,8 @@
     self.captureOutput = nil;
     self.captureMetadataOutput = nil;
     self.callBackBlock = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id)init {
@@ -87,6 +89,9 @@
     
     AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
     [self.session addInput:captureInput];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     dispatch_queue_t dispatchQueue;
     dispatchQueue = dispatch_queue_create("com.jam.camera", NULL);
@@ -152,6 +157,15 @@
             }
         }
     }
+}
+
+#pragma mark -- NSNotification
+- (void)willEnterBackground:(NSNotification*)notification {
+    [self stopRunning];
+}
+
+- (void)willEnterForeground:(NSNotification*)notification {
+    [self startRunning];
 }
 
 #pragma mark private method
@@ -369,6 +383,8 @@
             
             [self.session removeInput:input];
             [self.session addInput:newInput];
+            
+            [self setRelativeVideoOrientation];
             
             [self.session commitConfiguration];
             break;

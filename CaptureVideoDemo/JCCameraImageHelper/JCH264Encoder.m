@@ -188,9 +188,17 @@
 
 @property (nonatomic, assign) BOOL enbaleWriteVideoFile;
 
+//是否在后台，在后台不编码
+
+@property (nonatomic, assign) BOOL isBackGround;
+
 @end
 
 @implementation JCH264Encoder
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (instancetype)initWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality {
     self = [super init];
@@ -204,6 +212,9 @@
 #ifdef DEBUG
         self.enbaleWriteVideoFile = YES;
 #endif
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationDidBecomeActiveNotification object:nil];
         
         self.jcLiveVideoproperties = [[JCLiveVideoproperties alloc] initWithJCLiveVideoQuality:liveVideoQuality];
         [self configVideoCompressonWith:_jcLiveVideoproperties];
@@ -346,8 +357,32 @@ static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sour
     }
 }
 
+
+#pragma mark -- NSNotification
+- (void)willEnterBackground:(NSNotification*)notification{
+    _isBackGround = YES;
+}
+
+- (void)willEnterForeground:(NSNotification*)notification{
+    
+    if (_compressionSession) {
+        VTCompressionSessionCompleteFrames(_compressionSession, kCMTimeInvalid);
+        VTCompressionSessionInvalidate(_compressionSession);
+        CFRelease(_compressionSession);
+        _compressionSession = NULL;
+    }
+    
+    [self configVideoCompressonWith:self.jcLiveVideoproperties];
+    
+    _isBackGround = NO;
+}
+
 #pragma mark -VideoCompressEncoder
 - (void)encodeVideoData:(CMSampleBufferRef)pixelBuffer timeStamp:(uint64_t)timeStamp{
+    
+    if (_isBackGround) {
+        return ;
+    }
     
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         CVImageBufferRef imageBuffer = (CVImageBufferRef)CMSampleBufferGetImageBuffer(pixelBuffer);
@@ -362,8 +397,6 @@ static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sour
         
         NSNumber *timeNumber = @(timeStamp);
         VTEncodeInfoFlags flags;
-        
-        NSLog(@"%ld, %llu", (long)_frameCount, timeStamp);
         
         VTCompressionSessionEncodeFrame(_compressionSession, imageBuffer, presentationTimeStamp, duration, (__bridge CFDictionaryRef)prorperties, (__bridge_retained void *)timeNumber, &flags);
     });
