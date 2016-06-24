@@ -11,10 +11,10 @@
 @interface JCLiveVideoproperties : NSObject
 
 /// 视频分辨率宽
-@property (nonatomic, assign) NSInteger width;
+@property (nonatomic, assign) int width;
 
 /// 视频分辨率高
-@property (nonatomic, assign) NSInteger height;
+@property (nonatomic, assign) int height;
 
 /// 视频的帧率，即 fps
 @property (nonatomic, assign) NSUInteger videoFrameRate;
@@ -37,7 +37,10 @@
 /// 视频的最小码率，单位是 bps
 @property (nonatomic, assign) NSUInteger videoMinBitRate;
 
+@property (nonatomic, assign) JCLiveVideoQuality liveVideoQuality;
+
 - (instancetype)initWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality;
+- (void)changeJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality;
 
 @end
 
@@ -47,6 +50,7 @@
     self = [super init];
     
     if (self) {
+        self.liveVideoQuality = liveVideoQuality;
         [self configPropertiesWithJCLiveVideoQuality:liveVideoQuality];
     }
     
@@ -92,46 +96,92 @@
         case JCLiveVideoQuality_Medium1: {
             self.width = 540;
             self.height = 960;
+            self.videoFrameRate = 15;
+            self.videoMaxFrameRate = 15;
+            self.videoMinFrameRate = 10;
+            self.videoBitRate = 800 * 1024;
+            self.videoMaxBitRate = 900 * 1024;
+            self.videoMinBitRate = 500 * 1024;
+        }
+            break;
+        case JCLiveVideoQuality_Medium2: {
+            self.width = 540;
+            self.height = 960;
+            self.videoFrameRate = 24;
+            self.videoMaxFrameRate = 24;
+            self.videoMinFrameRate = 12;
+            self.videoBitRate = 800 * 1024;
+            self.videoMaxBitRate = 900 * 1024;
+            self.videoMinBitRate = 500 * 1024;
+        }
+            break;
+        case JCLiveVideoQuality_Medium3: {
+            self.width = 540;
+            self.height = 960;
             self.videoFrameRate = 30;
             self.videoMaxFrameRate = 30;
             self.videoMinFrameRate = 15;
-            self.videoBitRate = 800 * 1024;
-            self.videoMaxBitRate = 900 * 1024;
+            self.videoBitRate = 1000 * 1024;
+            self.videoMaxBitRate = 1200 * 1024;
+            self.videoMinBitRate = 500 * 1024;
+        }
+            break;
+        case JCLiveVideoQuality_High1: {
+            self.width = 720;
+            self.height = 1280;
+            self.videoFrameRate = 15;
+            self.videoMaxFrameRate = 15;
+            self.videoMinFrameRate = 10;
+            self.videoBitRate = 1000 * 1024;
+            self.videoMaxBitRate = 1200 * 1024;
             self.videoMinBitRate = 500 * 1024;
             
         }
             break;
-        case JCLiveVideoQuality_Medium2: {
-            
-        }
-            break;
-        case JCLiveVideoQuality_Medium3: {
-            
-        }
-            break;
-        case JCLiveVideoQuality_High1: {
-            
-        }
-            break;
         case JCLiveVideoQuality_High2: {
-            
+            self.width = 720;
+            self.height = 1280;
+            self.videoFrameRate = 24;
+            self.videoMaxFrameRate = 24;
+            self.videoMinFrameRate = 12;
+            self.videoBitRate = 1200 * 1024;
+            self.videoMaxBitRate = 1300 * 1024;
+            self.videoMinBitRate = 800 * 1024;
         }
             break;
         case JCLiveVideoQuality_High3: {
-            
+            self.width = 720;
+            self.height = 1280;
+            self.videoFrameRate = 30;
+            self.videoMaxFrameRate = 30;
+            self.videoMinFrameRate = 15;
+            self.videoBitRate = 1200 * 1024;
+            self.videoMaxBitRate = 1300 * 1024;
+            self.videoMinBitRate = 800 * 1024;
         }
             break;
         default:
             break;
     }
+    self.videoMaxKeyframeInterval = self.videoFrameRate*2;
+}
+
+- (void)changeJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality {
+    self.liveVideoQuality = liveVideoQuality;
+    [self configPropertiesWithJCLiveVideoQuality:liveVideoQuality];
 }
 
 @end
 
 @interface JCH264Encoder ()
 
+//视频质量选项
+@property (nonatomic, strong) JCLiveVideoproperties *jcLiveVideoproperties;
+//压缩session
 @property (nonatomic, assign) VTCompressionSessionRef compressionSession;
+//h.264 sps数据
 @property (nonatomic, strong) NSData *sps;
+//h.264 pps数据
 @property (nonatomic, strong) NSData *pps;
 
 @property (nonatomic, assign) NSInteger frameCount;
@@ -146,57 +196,75 @@
     self = [super init];
     
     if (self) {
-        
-    }
-    
-    return self;
-}
-
-- (instancetype)initEncodeWidth:(int)width withHeight:(int)height {
-    self = [super init];
-    
-    if (self) {
-        self.compressionSession = nil;
+        self.compressionSession = NULL;
         self.sps = nil;
         self.pps = nil;
-        _frameCount = 0;
+        self.frameCount = 0;
         
 #ifdef DEBUG
         self.enbaleWriteVideoFile = YES;
 #endif
         
-        NSDictionary* pixelBufferOptions = @{ (NSString*) kCVPixelBufferPixelFormatTypeKey : //@(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange),
-                                              @(kCVPixelFormatType_32BGRA),
-                                              (NSString*) kCVPixelBufferWidthKey : @(width),
-                                              (NSString*) kCVPixelBufferHeightKey : @(height),
-                                              (NSString*) kCVPixelBufferOpenGLESCompatibilityKey : @YES,
-                                              (NSString*) kCVPixelBufferIOSurfacePropertiesKey : @{}};
-        
-        OSStatus status = VTCompressionSessionCreate(NULL, width, height, kCMVideoCodecType_H264, NULL, (__bridge CFDictionaryRef)pixelBufferOptions, NULL, &VideoCompressonOutputCallback, (__bridge void*)self, &_compressionSession);
+        self.jcLiveVideoproperties = [[JCLiveVideoproperties alloc] initWithJCLiveVideoQuality:liveVideoQuality];
+        [self configVideoCompressonWith:_jcLiveVideoproperties];
+    }
+    
+    return self;
+}
+
+- (void)changeJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality {
+    
+    if (self.jcLiveVideoproperties.liveVideoQuality == liveVideoQuality) {
+        return ;
+    }
+    
+    [self.jcLiveVideoproperties changeJCLiveVideoQuality:liveVideoQuality];
+    
+    VTCompressionSessionCompleteFrames(_compressionSession, kCMTimeInvalid);
+    VTCompressionSessionInvalidate(_compressionSession);
+    CFRelease(_compressionSession);
+    _compressionSession = NULL;
+    
+    [self configVideoCompressonWith:_jcLiveVideoproperties];
+    
+}
+
+
+- (void)configVideoCompressonWith:(JCLiveVideoproperties *)liveVideoProperties {
+    
+    NSDictionary* pixelBufferOptions = @{ (NSString*) kCVPixelBufferPixelFormatTypeKey : //@(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange),
+                                          @(kCVPixelFormatType_32BGRA),
+                                          (NSString*) kCVPixelBufferWidthKey : @(liveVideoProperties.width),
+                                          (NSString*) kCVPixelBufferHeightKey : @(liveVideoProperties.height),
+                                          (NSString*) kCVPixelBufferOpenGLESCompatibilityKey : @YES,
+                                          (NSString*) kCVPixelBufferIOSurfacePropertiesKey : @{}};
+    
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        OSStatus status = VTCompressionSessionCreate(NULL, liveVideoProperties.width, liveVideoProperties.height, kCMVideoCodecType_H264, NULL, (__bridge CFDictionaryRef)pixelBufferOptions, NULL, &VideoCompressonOutputCallback, (__bridge void*)self, &_compressionSession);
         
         if (status != 0) {
             NSLog(@"VTCompressionSessionCreate error");
+            return;
         }
         
-        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)@(60));
+        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)@(liveVideoProperties.videoMaxKeyframeInterval));
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFTypeRef)@(2));
-        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(800*1024));
-        NSArray *dataLimits = @[@(150*1024), @(1)];
+        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_AverageBitRate, (__bridge CFTypeRef)@(liveVideoProperties.videoBitRate));
+        NSArray *dataLimits = @[@(liveVideoProperties.videoBitRate*1.5/8), @(1)];
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)dataLimits);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_Quality, (__bridge CFTypeRef)@(1.0));
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MoreFramesBeforeStart, kCFBooleanTrue);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MoreFramesAfterEnd, kCFBooleanTrue);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ProfileLevel, kVTProfileLevel_H264_Main_AutoLevel);
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_H264EntropyMode, kVTH264EntropyMode_CABAC);
-        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxFrameDelayCount, (__bridge CFTypeRef)@(15));
+        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_MaxFrameDelayCount, (__bridge CFTypeRef)@(liveVideoProperties.videoMaxFrameRate));
         status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanFalse);
-        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)@(30));
+        status = VTSessionSetProperty(_compressionSession, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)@(liveVideoProperties.videoFrameRate));
         
         VTCompressionSessionPrepareToEncodeFrames(_compressionSession);
-    }
-    
-    return self;
+    });
 }
+
 
 #pragma mark -- VideoCompressonCallBack
 static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer) {
@@ -276,25 +344,30 @@ static void VideoCompressonOutputCallback(void *outputCallbackRefCon, void *sour
         }
         
     }
-    
-    
 }
 
 #pragma mark -VideoCompressEncoder
 - (void)encodeVideoData:(CMSampleBufferRef)pixelBuffer timeStamp:(uint64_t)timeStamp{
-    CVImageBufferRef imageBuffer = (CVImageBufferRef)CMSampleBufferGetImageBuffer(pixelBuffer);
-    _frameCount++;
-    CMTime presentationTimeStamp = CMTimeMake(_frameCount, 1000);
-    CMTime duration = CMTimeMake(1, (int32_t)30);
     
-    NSDictionary *prorperties = nil;
-    if (_frameCount % (int32_t)60 == 0) {
-        prorperties = @{(__bridge NSString *)kVTEncodeFrameOptionKey_ForceKeyFrame : @YES};
-    }
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        CVImageBufferRef imageBuffer = (CVImageBufferRef)CMSampleBufferGetImageBuffer(pixelBuffer);
+        _frameCount++;
+        CMTime presentationTimeStamp = CMTimeMake(_frameCount, 1000);
+        CMTime duration = CMTimeMake(1, (int32_t)self.jcLiveVideoproperties.videoFrameRate);
+        
+        NSDictionary *prorperties = nil;
+        if (_frameCount % (int32_t)self.jcLiveVideoproperties.videoMaxFrameRate == 0) {
+            prorperties = @{(__bridge NSString *)kVTEncodeFrameOptionKey_ForceKeyFrame : @YES};
+        }
+        
+        NSNumber *timeNumber = @(timeStamp);
+        VTEncodeInfoFlags flags;
+        
+        NSLog(@"%ld, %llu", (long)_frameCount, timeStamp);
+        
+        VTCompressionSessionEncodeFrame(_compressionSession, imageBuffer, presentationTimeStamp, duration, (__bridge CFDictionaryRef)prorperties, (__bridge_retained void *)timeNumber, &flags);
+    });
     
-    NSNumber *timeNumber = @(timeStamp);
-    VTEncodeInfoFlags flags;
-    VTCompressionSessionEncodeFrame(_compressionSession, imageBuffer, presentationTimeStamp, duration, (__bridge CFDictionaryRef)prorperties, (__bridge_retained void *)timeNumber, &flags);
 }
 
 - (void)endVideoCompression {

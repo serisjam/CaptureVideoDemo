@@ -58,7 +58,7 @@
     //实时取景
     [_cameraHelper startRunning];
     
-    self.jcH264Encoder = [[JCH264Encoder alloc] initEncodeWidth:540.0 withHeight:960.0];
+    self.jcH264Encoder = [[JCH264Encoder alloc] initWithJCLiveVideoQuality:JCLiveVideoQuality_Medium2];
     [self.jcH264Encoder setDelegate:self];
     
     __weak typeof(self) weakSelf = self;
@@ -99,7 +99,6 @@
 #pragma mark JCH264EncoderDelegate
 
 - (void)getEncodedData:(NSData *)data isKeyFrame:(BOOL)isKeyFrame {
-    NSLog(@"gotEncodedData %d", (int)[data length]);
     
     if (self.h264FileHandle != NULL)
     {
@@ -138,6 +137,14 @@
     OSSpinLockUnlock(&lock);
     
     return currentts;
+}
+
+- (IBAction)changeLow:(id)sender {
+    [self.jcH264Encoder changeJCLiveVideoQuality:JCLiveVideoQuality_Low2];
+}
+
+- (IBAction)changeHigh:(id)sender {
+    [self.jcH264Encoder changeJCLiveVideoQuality:JCLiveVideoQuality_High2];
 }
 
 @end

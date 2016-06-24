@@ -47,6 +47,8 @@ typedef NS_ENUM(NSUInteger, JCLiveVideoQuality){
 
 - (instancetype)initWithJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality;
 
+- (void)changeJCLiveVideoQuality:(JCLiveVideoQuality)liveVideoQuality;
+
 - (void)encodeVideoData:(CMSampleBufferRef)pixelBuffer timeStamp:(uint64_t)timeStamp;
 
 - (void)endVideoCompression;
