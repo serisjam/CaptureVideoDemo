@@ -11,3 +11,5 @@ typedef void(^cameraCallBacklBlock)(CIImage *image, NSString *qrContent, BOOL *i
 - (void)carmeraScanBlock:(cameraCallBacklBlock)cameraCallBacklBlock;
 
 附带二维码识别功能
+
+txttxttrtzt
