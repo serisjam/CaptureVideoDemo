@@ -8,16 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import <ImageIO/ImageIO.h>
 
 typedef NS_ENUM(NSInteger, JCCameraScanType) {
-    JCCameraScanOriginType,
-    JCCameraScanQRType,
+    JCCameraScanCodeType,
     JCCameraScanImageType
 };
 
-typedef void(^cameraCallBacklBlock)(CIImage *image, NSString *qrContent, BOOL *isNextFilterImage);
-typedef void(^cameraCaptureOriginDataBlock)(CMSampleBufferRef sampleBufferRef);
+typedef void(^JCCameraCallBacklBlock)(UIImage *image, NSString *qrContent, BOOL *isNextFilterImage);
 
 @interface JCCameraImageHelper : NSObject
 
@@ -29,10 +26,6 @@ typedef void(^cameraCaptureOriginDataBlock)(CMSampleBufferRef sampleBufferRef);
 - (void)embedPreviewInView:(UIView *)aView;
 
 //获取视频流其中的一帧或者成功扫描二维码
-- (void)carmeraScanBlock:(cameraCallBacklBlock)cameraCallBacklBlock;
-- (void)swapFrontAndBackCameras;
-
-//获取原始视频流
-- (void)carmeraScanOriginBlock:(cameraCaptureOriginDataBlock)cameraCaptureOriginBlock;
+- (void)carmeraScanBlock:(JCCameraCallBacklBlock)cameraCallBacklBlock;
 
 @end

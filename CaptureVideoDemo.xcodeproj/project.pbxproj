@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3949ACD41D1CFEB100DB51DC /* AVPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */; };
-		39B0BB431D1D190700A83216 /* JCAudioHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 39B0BB421D1D190700A83216 /* JCAudioHelper.m */; };
-		39B0BB461D1D1F0A00A83216 /* JCAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 39B0BB451D1D1F0A00A83216 /* JCAudioEncoder.m */; };
-		39E772461D1BDC8A005891BA /* JCH264Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E772451D1BDC8A005891BA /* JCH264Encoder.m */; };
 		EBF1C21C1CF69FD5000D3194 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C21B1CF69FD5000D3194 /* main.m */; };
 		EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C21E1CF69FD5000D3194 /* AppDelegate.m */; };
 		EBF1C2221CF69FD5000D3194 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C2211CF69FD5000D3194 /* ViewController.m */; };
@@ -20,20 +16,10 @@
 		EBF1C2351CF6A1ED000D3194 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF1C2341CF6A1ED000D3194 /* AVFoundation.framework */; };
 		EBF1C23F1CF6A2DE000D3194 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF1C23E1CF6A2DE000D3194 /* ImageIO.framework */; };
 		EBF1C2421CF6D3AC000D3194 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF1C2411CF6D3AC000D3194 /* GLKit.framework */; };
-		EBF1C2451CF6D3DF000D3194 /* CoreImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C2441CF6D3DF000D3194 /* CoreImageView.m */; };
-		EBF1C2481CF6FEE7000D3194 /* CaptureImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */; };
 		EBF1C24C1CF70B21000D3194 /* JCCameraImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1C24B1CF70B21000D3194 /* JCCameraImageHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3949ACD21D1CFEB100DB51DC /* AVPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVPlayerViewController.h; sourceTree = "<group>"; };
-		3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVPlayerViewController.m; sourceTree = "<group>"; };
-		39B0BB411D1D190700A83216 /* JCAudioHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCAudioHelper.h; sourceTree = "<group>"; };
-		39B0BB421D1D190700A83216 /* JCAudioHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCAudioHelper.m; sourceTree = "<group>"; };
-		39B0BB441D1D1F0A00A83216 /* JCAudioEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCAudioEncoder.h; sourceTree = "<group>"; };
-		39B0BB451D1D1F0A00A83216 /* JCAudioEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCAudioEncoder.m; sourceTree = "<group>"; };
-		39E772441D1BDC8A005891BA /* JCH264Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCH264Encoder.h; sourceTree = "<group>"; };
-		39E772451D1BDC8A005891BA /* JCH264Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCH264Encoder.m; sourceTree = "<group>"; };
 		EBF1C2171CF69FD5000D3194 /* CaptureVideoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaptureVideoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBF1C21B1CF69FD5000D3194 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EBF1C21D1CF69FD5000D3194 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -47,10 +33,6 @@
 		EBF1C2341CF6A1ED000D3194 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EBF1C23E1CF6A2DE000D3194 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EBF1C2411CF6D3AC000D3194 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		EBF1C2431CF6D3DF000D3194 /* CoreImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreImageView.h; sourceTree = "<group>"; };
-		EBF1C2441CF6D3DF000D3194 /* CoreImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreImageView.m; sourceTree = "<group>"; };
-		EBF1C2461CF6FEE7000D3194 /* CaptureImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureImageViewController.h; sourceTree = "<group>"; };
-		EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureImageViewController.m; sourceTree = "<group>"; };
 		EBF1C24A1CF70B21000D3194 /* JCCameraImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCCameraImageHelper.h; sourceTree = "<group>"; };
 		EBF1C24B1CF70B21000D3194 /* JCCameraImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCCameraImageHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,17 +51,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3949ACD71D1D143300DB51DC /* JCAudioHelper */ = {
-			isa = PBXGroup;
-			children = (
-				39B0BB411D1D190700A83216 /* JCAudioHelper.h */,
-				39B0BB421D1D190700A83216 /* JCAudioHelper.m */,
-				39B0BB441D1D1F0A00A83216 /* JCAudioEncoder.h */,
-				39B0BB451D1D1F0A00A83216 /* JCAudioEncoder.m */,
-			);
-			path = JCAudioHelper;
-			sourceTree = "<group>";
-		};
 		EBF1C20E1CF69FD5000D3194 = {
 			isa = PBXGroup;
 			children = (
@@ -100,18 +71,11 @@
 		EBF1C2191CF69FD5000D3194 /* CaptureVideoDemo */ = {
 			isa = PBXGroup;
 			children = (
-				3949ACD71D1D143300DB51DC /* JCAudioHelper */,
 				EBF1C2491CF70B0E000D3194 /* JCCameraImageHelper */,
 				EBF1C21D1CF69FD5000D3194 /* AppDelegate.h */,
 				EBF1C21E1CF69FD5000D3194 /* AppDelegate.m */,
-				EBF1C2431CF6D3DF000D3194 /* CoreImageView.h */,
-				EBF1C2441CF6D3DF000D3194 /* CoreImageView.m */,
 				EBF1C2201CF69FD5000D3194 /* ViewController.h */,
 				EBF1C2211CF69FD5000D3194 /* ViewController.m */,
-				EBF1C2461CF6FEE7000D3194 /* CaptureImageViewController.h */,
-				EBF1C2471CF6FEE7000D3194 /* CaptureImageViewController.m */,
-				3949ACD21D1CFEB100DB51DC /* AVPlayerViewController.h */,
-				3949ACD31D1CFEB100DB51DC /* AVPlayerViewController.m */,
 				EBF1C2231CF69FD5000D3194 /* Main.storyboard */,
 				EBF1C2261CF69FD5000D3194 /* Assets.xcassets */,
 				EBF1C2281CF69FD5000D3194 /* LaunchScreen.storyboard */,
@@ -142,8 +106,6 @@
 		EBF1C2491CF70B0E000D3194 /* JCCameraImageHelper */ = {
 			isa = PBXGroup;
 			children = (
-				39E772441D1BDC8A005891BA /* JCH264Encoder.h */,
-				39E772451D1BDC8A005891BA /* JCH264Encoder.m */,
 				EBF1C24A1CF70B21000D3194 /* JCCameraImageHelper.h */,
 				EBF1C24B1CF70B21000D3194 /* JCCameraImageHelper.m */,
 			);
@@ -181,6 +143,7 @@
 				TargetAttributes = {
 					EBF1C2161CF69FD5000D3194 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 242RBKYTC7;
 					};
 				};
 			};
@@ -220,15 +183,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39E772461D1BDC8A005891BA /* JCH264Encoder.m in Sources */,
 				EBF1C2221CF69FD5000D3194 /* ViewController.m in Sources */,
-				EBF1C2481CF6FEE7000D3194 /* CaptureImageViewController.m in Sources */,
-				EBF1C2451CF6D3DF000D3194 /* CoreImageView.m in Sources */,
 				EBF1C21F1CF69FD5000D3194 /* AppDelegate.m in Sources */,
 				EBF1C21C1CF69FD5000D3194 /* main.m in Sources */,
-				3949ACD41D1CFEB100DB51DC /* AVPlayerViewController.m in Sources */,
-				39B0BB431D1D190700A83216 /* JCAudioHelper.m in Sources */,
-				39B0BB461D1D1F0A00A83216 /* JCAudioEncoder.m in Sources */,
 				EBF1C24C1CF70B21000D3194 /* JCCameraImageHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +298,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 242RBKYTC7;
 				INFOPLIST_FILE = CaptureVideoDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -353,6 +311,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 242RBKYTC7;
 				INFOPLIST_FILE = CaptureVideoDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
