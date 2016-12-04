@@ -20,6 +20,13 @@ typedef void(^JCCameraCallBacklBlock)(UIImage *image, NSString *qrContent, BOOL 
 
 - (id)initWithCameraScanType:(JCCameraScanType)cameraScanType;
 
+//闪光灯模式，默认打开自动模式
+@property (nonatomic, assign) AVCaptureTorchMode captureTorchMode;
+//扫描区域,默认居中扫描
+@property (nonatomic, assign) CGRect scanRect;
+//是否开启扫描框，默认开启
+@property (nonatomic, assign) BOOL isAvailable;
+
 - (void)startRunning;
 - (void)stopRunning;
 

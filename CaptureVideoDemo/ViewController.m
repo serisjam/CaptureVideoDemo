@@ -42,11 +42,18 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         [weakSelf.cameraHelper carmeraScanBlock:^(UIImage *image, NSString *qrContent, BOOL *isNextFilterImage){
             NSLog(@"%@", qrContent);
-            *isNextFilterImage = YES;
+            *isNextFilterImage = NO;
         }];
     });
 }
 
+- (IBAction)onTorch:(id)sender {
+    if (_cameraHelper.captureTorchMode == AVCaptureTorchModeAuto || _cameraHelper.captureTorchMode == AVCaptureTorchModeOff) {
+        [_cameraHelper setCaptureTorchMode:AVCaptureTorchModeOn];
+    } else {
+        [_cameraHelper setCaptureTorchMode:AVCaptureTorchModeOff];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

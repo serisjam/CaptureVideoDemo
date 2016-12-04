@@ -8,19 +8,17 @@
 
 #import "JCCameraImageHelper.h"
 
-//版本比较
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] !=NSOrderedAscending)
-
 @interface JCCameraImageHelper () <AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureMetadataOutputObjectsDelegate>
 
 @property (nonatomic, strong) AVCaptureSession *session;
 @property (nonatomic, strong) AVCaptureVideoDataOutput *captureOutput;
 @property (nonatomic, strong) AVCaptureMetadataOutput *captureMetadataOutput;
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
+
+@property (nonatomic, strong) UIView *focusView;
+
 @property (nonatomic, strong) JCCameraCallBacklBlock callBackBlock;
-
 @property (nonatomic, assign) BOOL isGetNextFilterImage;
-
 @property (nonatomic, assign) JCCameraScanType cameraScanType;
 
 @end
@@ -61,6 +59,7 @@
 - (void)initializeWithCameraScanType:(JCCameraScanType)cameraScanType {
     
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    [self setCaptureTorchMode:AVCaptureTorchModeAuto];
     NSError *error;
     
     self.session = [[AVCaptureSession alloc] init];
@@ -87,8 +86,16 @@
     [_captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
     [self.session addOutput:_captureMetadataOutput];
     
-    _captureMetadataOutput.metadataObjectTypes =
-    _captureMetadataOutput.availableMetadataObjectTypes;
+    _captureMetadataOutput.metadataObjectTypes = @[AVMetadataObjectTypeQRCode,
+                                                   AVMetadataObjectTypeUPCECode,
+                                                   AVMetadataObjectTypeCode39Code,
+                                                   AVMetadataObjectTypeCode39Mod43Code,
+                                                   AVMetadataObjectTypeEAN13Code,
+                                                   AVMetadataObjectTypeEAN8Code,
+                                                   AVMetadataObjectTypeCode93Code,
+                                                   AVMetadataObjectTypeCode128Code,
+                                                   AVMetadataObjectTypePDF417Code,
+                                                   AVMetadataObjectTypeAztecCode];
 }
 
 
@@ -200,6 +207,18 @@
     
 }
 
+#pragma mark private method
+
+- (void)animateFocusView {
+    [self.focusView.layer removeAllAnimations];
+    
+    [UIView animateWithDuration:1.0 delay:0 options:UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse|UIViewAnimationOptionBeginFromCurrentState animations:^{
+        CGFloat height = _scanRect.size.width*0.35;
+        self.focusView.center = CGPointMake(CGRectGetMidX(_scanRect), CGRectGetMidY(_scanRect));
+        self.focusView.bounds = CGRectMake(0, 0, _scanRect.size.width, height);
+    } completion:nil];
+}
+
 #pragma mark public method
 
 -(void) embedPreviewInView:(UIView *)aView {
@@ -208,12 +227,59 @@
     _previewLayer.frame = aView.bounds;
     _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     
+    if ([_previewLayer.connection isVideoOrientationSupported]) {
+        _previewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+    }
+    
     if (self.cameraScanType == JCCameraScanCodeType) {
-        _captureMetadataOutput.rectOfInterest = CGRectMake(0.25, 0.25, 0.5, 0.5);
+        _isAvailable = YES;
+        if (![[aView subviews] containsObject:self.focusView]) {
+            [aView addSubview:self.focusView];
+        }
+        [self setScanRect:CGRectMake(aView.bounds.size.width*0.2, aView.bounds.size.height*0.2, aView.bounds.size.width*0.6, aView.bounds.size.width*0.6)];
     }
     
     [aView.layer insertSublayer:_previewLayer atIndex:0];
 }
+
+- (void)setIsAvailable:(BOOL)isAvailable {
+    if (isAvailable) {
+        [self.focusView setHidden:NO];
+        [self animateFocusView];
+        return ;
+    }
+    [self.focusView setHidden:YES];
+    [self.focusView.layer removeAllAnimations];
+}
+
+- (void)setCaptureTorchMode:(AVCaptureTorchMode)captureTorchMode {
+    _captureTorchMode = captureTorchMode;
+    
+    AVCaptureDevice *backCamera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if ([backCamera isTorchAvailable] && [backCamera isTorchModeSupported:AVCaptureTorchModeOn]) {
+        BOOL success = [backCamera lockForConfiguration:nil];
+        if (success) {
+            [backCamera setTorchMode:_captureTorchMode];
+            [backCamera unlockForConfiguration];
+        }
+    }
+}
+
+- (void)setScanRect:(CGRect)scanRect {
+    NSAssert(!CGRectIsEmpty(scanRect), @"Unable to set an empty rectangle as the scanRect of MTBBarcodeScanner");
+    if (self.cameraScanType != JCCameraScanCodeType) {
+        return ;
+    }
+    _scanRect = scanRect;
+    CGFloat width = _scanRect.size.width > _scanRect.size.height ? _scanRect.size.height : _scanRect.size.width;
+    width -= width * 0.15f;
+    self.focusView.center = CGPointMake(CGRectGetMidX(_scanRect), CGRectGetMidY(_scanRect));
+    self.focusView.bounds = CGRectMake(0, 0, width, width);
+    CGRect resultRect = [_previewLayer metadataOutputRectOfInterestForRect:_scanRect];
+    _captureMetadataOutput.rectOfInterest = resultRect;
+    [self animateFocusView];
+}
+
 
 - (void) startRunning {
     [[self session] startRunning];
@@ -222,12 +288,28 @@
 
 - (void) stopRunning {
     [[self session] stopRunning];
-    
     _isGetNextFilterImage = NO;
 }
 
 - (void)carmeraScanBlock:(JCCameraCallBacklBlock)cameraCallBacklBlock {
     _callBackBlock = cameraCallBacklBlock;
+}
+
+#pragma mark Setter/Getter
+
+- (UIView *)focusView {
+    if (!_focusView) {
+        _focusView = [[UIView alloc] init];
+        _focusView.layer.borderColor = [UIColor whiteColor].CGColor;
+        _focusView.layer.borderWidth = 2.0f;
+        _focusView.layer.cornerRadius = 5.0f;
+        _focusView.layer.shadowColor = [UIColor whiteColor].CGColor;
+        _focusView.layer.shadowRadius = 10.0f;
+        _focusView.layer.shadowOpacity = 0.9f;
+        _focusView.layer.shadowOffset = CGSizeZero;
+        _focusView.layer.masksToBounds = false;
+    }
+    return _focusView;
 }
 
 @end
